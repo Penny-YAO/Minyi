@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - 首頁{% endblock %}
+
+{% block content %}
+<section class="hero-intro">
+    <div class="container">
+        <div class="hero-text">
+            <p class="tagline">我們是一間專注於為每一位客戶創造價值的團隊工作室，秉持以下理念，持續打磨每一件作品。</p>
+            <ul class="hero-checklist">
+                {% for point in philosophy_points %}
+                <li><span class="check">✓</span>{{ point.title }}</li>
+                {% endfor %}
+            </ul>
+            <div class="hero-actions">
+                <a href="{{ url_for('main.portfolio') }}" class="btn">查看作品 &raquo;</a>
+                <a href="{{ url_for('main.contact') }}" class="btn btn-outline">聯絡我們</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="split-highlight reveal">
+    <div class="split-panel split-panel-fast">
+        <svg class="split-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+        <div class="split-panel-inner">
+            <h2>快速架站</h2>
+            <p class="split-lead">架站不用等，想法立刻變網站！</p>
+            <ul class="split-list">
+                <li><span class="split-check">✓</span>一次建置、無綁約、免抽成</li>
+                <li><span class="split-check">✓</span>最直覺、最人性化的網頁設計</li>
+                <li><span class="split-check">✓</span>給您最佳的使用者體驗</li>
+            </ul>
+            <a href="{{ url_for('main.contact') }}" class="btn split-btn">詳細介紹</a>
+        </div>
+    </div>
+    <div class="split-panel split-panel-custom">
+        <svg class="split-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/><circle cx="12" cy="12" r="4"/></svg>
+        <div class="split-panel-inner">
+            <h2>客製化服務</h2>
+            <p class="split-lead">依需求量身打造，品質與效率兼顧</p>
+            <ul class="split-list">
+                <li><span class="split-check">✓</span>從個人網站到企業系統，一站式規劃</li>
+                <li><span class="split-check">✓</span>深入了解需求，給您最合適的方案</li>
+                <li><span class="split-check">✓</span>透明溝通、如期交付</li>
+            </ul>
+            <a href="{{ url_for('main.portfolio') }}" class="btn split-btn">詳細介紹</a>
+        </div>
+    </div>
+</section>
+
+<section class="section-block section-white work-showcase">
+    <div class="container">
+        <h2 class="reveal">精選作品</h2>
+        <div class="carousel work-carousel reveal" data-carousel>
+            <div class="carousel-track">
+                {% if featured_works %}
+                    {% for work in featured_works %}
+                    <div class="carousel-slide{{ ' active' if loop.first }}">
+                        <img src="{{ work.image_url }}" alt="{{ work.title }}">
+                        <div class="carousel-caption">
+                            <strong>{{ work.title }}</strong>
+                            {% if work.category %}<span>{{ work.category }}</span>{% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="carousel-slide active carousel-empty">
+                        <p>作品集籌備中，敬請期待</p>
+                    </div>
+                {% endif %}
+            </div>
+            {% if featured_works|length > 1 %}
+            <button type="button" class="carousel-arrow carousel-prev" aria-label="上一張">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button type="button" class="carousel-arrow carousel-next" aria-label="下一張">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div class="carousel-dots">
+                {% for work in featured_works %}
+                <button type="button" class="carousel-dot{{ ' active' if loop.first }}" aria-label="第 {{ loop.index }} 張"></button>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section-block section-white">
+    <div class="container">
+        <h2 class="reveal">服務核心</h2>
+        <div class="grid grid-4 reveal-stagger">
+            {% for point in philosophy_points %}
+            <div class="card core-card">
+                <div class="core-icon">
+                    {% if point.icon == "heart" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C.8 8.3 2.2 4.5 6 4.5c2 0 3.5 1.2 4 2.5.5-1.3 2-2.5 4-2.5 3.8 0 5.2 3.8 3.5 8-2.5 4.15-9.5 8.5-9.5 8.5Z"/></svg>
+                    {% elif point.icon == "target" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+                    {% elif point.icon == "shield" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+                    {% elif point.icon == "bulb" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3Z"/></svg>
+                    {% endif %}
+                </div>
+                <h3>{{ point.title }}</h3>
+                <p>{{ point.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-block section-white specialties">
+    <div class="container">
+        <h2 class="reveal">服務項目</h2>
+        <p class="section-intro reveal">從個人網站到企業系統，一站式規劃、設計與開發，並介接最新 AI 技術，讓網站管理更為便捷。</p>
+        <div class="grid grid-4 reveal-stagger">
+            {% for item in specialties %}
+            <div class="card specialty-card">
+                <div class="specialty-icon">
+                    {% if item.icon == "user" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+                    {% elif item.icon == "layout" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>
+                    {% elif item.icon == "building" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M9 8h.01M15 8h.01M9 12h.01M15 12h.01M9 16h.01M15 16h.01"/></svg>
+                    {% elif item.icon == "spark" %}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>
+                    {% endif %}
+                </div>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

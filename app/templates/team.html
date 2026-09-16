@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - 團隊成員{% endblock %}
+
+{% block content %}
+<section class="section section-team container">
+    <p class="team-description reveal-down">我們是一群深耕網站架設領域多年的專業團隊，成員橫跨技術開發與專案管理，熟悉各類型網站建置流程。從需求溝通、規劃設計到後續維護，都能提供細膩且穩定的服務品質，協助客戶順利將想法化為線上呈現。</p>
+
+    <div class="team-grid">
+        {% for member in members %}
+        <div class="team-card">
+            <div class="team-photo-wrap">
+                {% if member.photo_url %}
+                <img src="{{ member.photo_url }}" alt="{{ member.name }}">
+                {% else %}
+                <div class="team-photo-placeholder">{{ member.name[:1] }}</div>
+                {% endif %}
+                <div class="team-tint"></div>
+                <div class="team-scrim"></div>
+                <div class="team-overlay">
+                    <h3>{{ member.name }}</h3>
+                    <span class="team-underline"></span>
+                    <div class="team-tags">
+                        {% for tag in member.role.split('/') %}
+                        <span class="team-tag">{{ tag.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% if member.bio %}
+            <p class="team-bio"><span>{{ member.bio }}</span></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        {% for _ in range(placeholder_count) %}
+        <div class="team-card">
+            <div class="team-photo-wrap team-photo-wrap-empty">
+                <div class="team-overlay">
+                    <h3>敬請期待</h3>
+                    <span class="team-underline"></span>
+                    <div class="team-tags">
+                        <span class="team-tag">New Member</span>
+                    </div>
+                </div>
+            </div>
+            <p class="team-bio"><span>團隊持續擴編中，敬請期待新夥伴加入。</span></p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

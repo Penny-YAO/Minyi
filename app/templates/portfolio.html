@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - 案例實績{% endblock %}
+
+{% block content %}
+<section class="section container">
+    <h2>案例實績</h2>
+    <p class="section-intro">精選過去完成的專案與作品。</p>
+
+    {% if works %}
+    <div class="grid grid-3">
+        {% for work in works %}
+        <div class="card work-card">
+            {% if work.image_url %}
+            <img src="{{ work.image_url }}" alt="{{ work.title }}" class="work-image">
+            {% endif %}
+            <h3>{{ work.title }}</h3>
+            {% if work.category %}
+            <span class="tag">{{ work.category }}</span>
+            {% endif %}
+            {% if work.description %}
+            <p>{{ work.description }}</p>
+            {% endif %}
+            {% if work.link %}
+            <a href="{{ work.link }}" target="_blank" rel="noopener noreferrer" class="btn btn-small">查看作品</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">目前尚未新增作品資料，請透過 <code>seed.py</code> 或後台新增。</p>
+    {% endif %}
+</section>
+{% endblock %}
