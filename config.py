@@ -6,11 +6,22 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, ".env"))
 
 
+def _database_url():
+    url = os.environ.get("DATABASE_URL", "").strip()
+    if not url:
+        return "sqlite:///" + os.path.join(basedir, "instance", "minyi.db")
+    # 明確指定使用 psycopg（第 3 版）驅動，避免不同 SQLAlchemy 版本預設的驅動不同
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL", "sqlite:///" + os.path.join(basedir, "instance", "minyi.db")
-    )
+    SQLALCHEMY_DATABASE_URI = _database_url()
+    # Supabase pooler 會關閉閒置連線，使用前先檢查，斷線就自動重連
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     STUDIO_NAME = "明宜資訊"
