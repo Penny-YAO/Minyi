@@ -104,8 +104,9 @@
     </div>
 </section>
 
-<section class="section-block section-white">
-    <div class="container">
+<section class="section-block section-white services">
+    <div class="container service-row">
+        <div class="service-col">
         <h2 class="reveal">服務核心</h2>
         <div class="pager reveal" data-pager aria-roledescription="翻頁" aria-label="服務核心">
             <div class="pager-book">
@@ -132,11 +133,9 @@
             </div>
             {{ pager_controls(philosophy_points|length) }}
         </div>
-    </div>
-</section>
+        </div>
 
-<section class="section-block section-white specialties">
-    <div class="container">
+        <div class="service-col specialties">
         <h2 class="reveal">服務項目</h2>
         <p class="section-intro reveal">從個人網站到企業系統，一站式規劃、設計與開發，並介接最新 AI 技術，讓網站管理更為便捷。</p>
         <div class="pager reveal" data-pager aria-roledescription="翻頁" aria-label="服務項目">
@@ -163,6 +162,7 @@
             {% endfor %}
             </div>
             {{ pager_controls(specialties|length) }}
+        </div>
         </div>
     </div>
 </section>

@@ -749,6 +749,76 @@ body {
     }
 }
 
+/* 服務核心 / 服務項目 並排一列 */
+.service-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px;
+}
+
+.service-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-col .section-intro {
+    margin-bottom: 0;
+}
+
+/* 讓兩張卡片底部對齊（服務項目多一段簡介） */
+.service-col .pager {
+    width: 100%;
+    margin-top: auto;
+    padding-top: 32px;
+}
+
+.service-col .pager-page {
+    gap: 24px;
+    padding: 40px 36px;
+}
+
+.service-col .pager-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+}
+
+.service-col .pager-icon svg {
+    width: 34px;
+    height: 34px;
+}
+
+.service-col .pager-body h3 {
+    font-size: 1.3rem;
+}
+
+.service-col .pager-body p {
+    font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+    .service-row {
+        grid-template-columns: 1fr;
+        gap: 64px;
+    }
+}
+
+@media (max-width: 600px) {
+    .service-col .pager-page {
+        gap: 20px;
+        padding: 32px 24px;
+    }
+    .service-col .pager-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+    }
+    .service-col .pager-icon svg {
+        width: 30px;
+        height: 30px;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .pager-page,
     .pager-page.flip-out {
