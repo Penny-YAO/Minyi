@@ -31,8 +31,7 @@ def create_app(config_class=Config):
     def inject_now():
         return {"now": datetime.utcnow()}
 
-    with app.app_context():
-        from app import models
-        db.create_all()
+    # 資料表由 migrations 管理，請執行 python migrate_db.py 建立或更新
+    from app import models  # noqa: F401
 
     return app

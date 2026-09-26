@@ -22,6 +22,8 @@ Minyi/
 │       ├── js/main.js
 │       └── images/
 ├── instance/               # SQLite 資料庫檔案存放處（不進版控）
+├── migrations/              # 資料庫結構版本（Flask-Migrate）
+├── migrate_db.py            # 建立 / 更新資料表
 ├── config.py                # 設定檔
 ├── run.py                   # 應用程式進入點
 ├── seed.py                  # 建立範例資料
@@ -43,10 +45,13 @@ pip install -r requirements.txt
 # 3. 複製環境變數設定檔
 copy .env.example .env
 
-# 4. （選用）建立範例資料
+# 4. 建立 / 更新資料表
+python migrate_db.py
+
+# 5. （選用）建立範例資料
 python seed.py
 
-# 5. 啟動網站
+# 6. 啟動網站
 python run.py
 ```
 
@@ -54,7 +59,16 @@ python run.py
 
 ## 資料庫
 
-預設使用 SQLite（`instance/minyi.db`），首次啟動時會自動建立資料表。
+預設使用 SQLite（`instance/minyi.db`），資料表由 `migrations/` 管理，執行 `python migrate_db.py` 建立或更新。
+
+修改 `app/models.py`（例如新增欄位）後：
+
+```powershell
+flask --app run db migrate -m "說明這次的變更"   # 產生 migrations/versions/ 下的新檔案，請檢查內容
+python migrate_db.py                              # 套用到本機資料庫
+```
+
+把新產生的 migration 檔一起 commit、push，Render 部署時會自動套用到正式資料庫。
 未來若要更換為 PostgreSQL / MySQL，只需修改 `.env` 中的 `DATABASE_URL`。
 
 ## 功能頁面
@@ -68,7 +82,7 @@ python run.py
 
 1. **推上 GitHub**：本機尚未是 git repo，先 `git init`、commit 後建立一個 GitHub repository 並 push 上去。
 2. **建立服務**：到 Render 或 Railway 用「From GitHub repo」建立新的 Web Service，選擇這個 repository。
-3. **設定啟動指令**：兩個平台都會讀取 `Procfile`（`web: gunicorn run:app --bind 0.0.0.0:$PORT`），通常會自動偵測，不需手動填寫。
+3. **設定啟動指令**：Start Command 填 `python migrate_db.py && gunicorn run:app --bind 0.0.0.0:$PORT`（與 `Procfile` 相同），每次部署啟動前會自動更新資料庫結構。Render 的 Settings → Auto-Deploy 設為 On Commit，push 到 `main` 就會自動部署。
 4. **設定環境變數**：於平台的 Environment / Variables 設定：
    - `SECRET_KEY`：換成一組隨機字串（勿沿用 `.env.example` 內的預設值）
    - `DATABASE_URL`：正式環境建議改用平台提供的 Postgres（免費方案通常有附贈），例如 `postgresql://user:password@host:5432/dbname`。若仍用 SQLite，要注意多數 PaaS 的檔案系統是暫時性的，重新部署後資料可能會消失。
