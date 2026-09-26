@@ -24,6 +24,7 @@ Minyi/
 ├── instance/               # SQLite 資料庫檔案存放處（不進版控）
 ├── migrations/              # 資料庫結構版本（Flask-Migrate）
 ├── migrate_db.py            # 建立 / 更新資料表
+├── gunicorn.conf.py         # 正式環境啟動時自動執行 migrate_db
 ├── config.py                # 設定檔
 ├── run.py                   # 應用程式進入點
 ├── seed.py                  # 建立範例資料
@@ -82,7 +83,7 @@ python migrate_db.py                              # 套用到本機資料庫
 
 1. **推上 GitHub**：本機尚未是 git repo，先 `git init`、commit 後建立一個 GitHub repository 並 push 上去。
 2. **建立服務**：到 Render 或 Railway 用「From GitHub repo」建立新的 Web Service，選擇這個 repository。
-3. **設定啟動指令**：Start Command 填 `python migrate_db.py && gunicorn run:app --bind 0.0.0.0:$PORT`（與 `Procfile` 相同），每次部署啟動前會自動更新資料庫結構。Render 的 Settings → Auto-Deploy 設為 On Commit，push 到 `main` 就會自動部署。
+3. **設定啟動指令**：Start Command 填 `gunicorn run:app --bind 0.0.0.0:$PORT`（與 `Procfile` 相同）。gunicorn 會自動讀取 `gunicorn.conf.py`，每次啟動前自動更新資料庫結構。Render 的 Settings → Auto-Deploy 設為 On Commit，push 到 `main` 就會自動部署。
 4. **設定環境變數**：於平台的 Environment / Variables 設定：
    - `SECRET_KEY`：換成一組隨機字串（勿沿用 `.env.example` 內的預設值）
    - `DATABASE_URL`：正式環境建議改用平台提供的 Postgres（免費方案通常有附贈），例如 `postgresql://user:password@host:5432/dbname`。若仍用 SQLite，要注意多數 PaaS 的檔案系統是暫時性的，重新部署後資料可能會消失。
