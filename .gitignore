@@ -4,6 +4,7 @@ __pycache__/
 venv/
 .env
 instance/*.db
+app/static/uploads/
 .vscode/
 .idea/
 *.log

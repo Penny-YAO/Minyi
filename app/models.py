@@ -24,6 +24,7 @@ class Work(db.Model):
     category = db.Column(db.String(80), nullable=True)
     description = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(255), nullable=True)
+    video_url = db.Column(db.String(255), nullable=True)
     link = db.Column(db.String(255), nullable=True)
     order = db.Column(db.Integer, default=0, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

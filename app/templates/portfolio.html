@@ -11,7 +11,10 @@
     <div class="grid grid-3">
         {% for work in works %}
         <div class="card work-card">
-            {% if work.image_url %}
+            {% if work.video_url %}
+            <video src="{{ work.video_url }}" class="work-image" controls preload="metadata"
+                   {% if work.image_url %}poster="{{ work.image_url }}"{% endif %}></video>
+            {% elif work.image_url %}
             <img src="{{ work.image_url }}" alt="{{ work.title }}" class="work-image">
             {% endif %}
             <h3>{{ work.title }}</h3>

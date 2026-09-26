@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - 作品管理{% endblock %}
+
+{% block content %}
+<section class="section container">
+    <div class="admin-header">
+        <h2>作品管理</h2>
+        <div>
+            <a href="{{ url_for('admin.new_work') }}" class="btn">+ 新增作品</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-outline">登出</a>
+        </div>
+    </div>
+
+    {% if works %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>縮圖</th>
+                    <th>名稱</th>
+                    <th>分類</th>
+                    <th>影片</th>
+                    <th>排序</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work in works %}
+                <tr>
+                    <td>
+                        {% if work.image_url %}
+                        <img src="{{ work.image_url }}" alt="{{ work.title }}" class="admin-thumb">
+                        {% else %}
+                        <span class="empty-state">無圖片</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ work.title }}</td>
+                    <td>{{ work.category or "-" }}</td>
+                    <td>{{ "有" if work.video_url else "-" }}</td>
+                    <td>{{ work.order }}</td>
+                    <td class="admin-actions">
+                        <a href="{{ url_for('admin.edit_work', work_id=work.id) }}" class="btn btn-small">編輯</a>
+                        <form method="POST" action="{{ url_for('admin.delete_work', work_id=work.id) }}"
+                              onsubmit="return confirm('確定要刪除「{{ work.title }}」嗎？此動作無法復原。');">
+                            <button type="submit" class="btn btn-small btn-danger">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-state">目前尚未新增任何作品，點選右上方「新增作品」開始建立作品集。</p>
+    {% endif %}
+</section>
+{% endblock %}

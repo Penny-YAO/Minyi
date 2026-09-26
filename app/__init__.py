@@ -15,12 +15,17 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     os.makedirs(app.instance_path, exist_ok=True)
+    os.makedirs(os.path.join(app.config["UPLOAD_FOLDER"], "images"), exist_ok=True)
+    os.makedirs(os.path.join(app.config["UPLOAD_FOLDER"], "videos"), exist_ok=True)
 
     db.init_app(app)
     migrate.init_app(app, db)
 
     from app.routes import main_bp
     app.register_blueprint(main_bp)
+
+    from app.admin import admin_bp
+    app.register_blueprint(admin_bp)
 
     @app.context_processor
     def inject_now():

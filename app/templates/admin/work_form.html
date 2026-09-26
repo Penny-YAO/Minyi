@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - {{ "編輯作品" if work else "新增作品" }}{% endblock %}
+
+{% block content %}
+<section class="section container">
+    <div class="admin-header">
+        <h2>{{ "編輯作品" if work else "新增作品" }}</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">返回列表</a>
+    </div>
+
+    <form method="POST" class="contact-form" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title(class_="form-control") }}
+            {% for error in form.title.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.category.label }}
+            {{ form.category(class_="form-control") }}
+            {% for error in form.category.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.description.label }}
+            {{ form.description(class_="form-control", rows=6) }}
+            {% for error in form.description.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.image.label }}
+            {% if work and work.image_url %}
+            <div class="admin-current-media">
+                <img src="{{ work.image_url }}" alt="{{ work.title }}" class="admin-thumb">
+                <span>目前的封面圖片，選擇新檔案即可替換</span>
+            </div>
+            {% endif %}
+            {{ form.image(class_="form-control") }}
+            {% for error in form.image.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.video.label }}
+            {% if work and work.video_url %}
+            <div class="admin-current-media">
+                <video src="{{ work.video_url }}" class="admin-thumb-video" controls></video>
+                <span>目前的作品影片，選擇新檔案即可替換</span>
+            </div>
+            {% endif %}
+            {{ form.video(class_="form-control") }}
+            {% for error in form.video.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.link.label }}
+            {{ form.link(class_="form-control", placeholder="https://...") }}
+            {% for error in form.link.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.order.label }}
+            {{ form.order(class_="form-control") }}
+            {% for error in form.order.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
+        </div>
+
+        {{ form.submit(class_="btn") }}
+    </form>
+</section>
+{% endblock %}
