@@ -87,5 +87,9 @@ python migrate_db.py                              # 套用到本機資料庫
 4. **設定環境變數**：於平台的 Environment / Variables 設定：
    - `SECRET_KEY`：換成一組隨機字串（勿沿用 `.env.example` 內的預設值）
    - `DATABASE_URL`：正式環境建議改用平台提供的 Postgres（免費方案通常有附贈），例如 `postgresql://user:password@host:5432/dbname`。若仍用 SQLite，要注意多數 PaaS 的檔案系統是暫時性的，重新部署後資料可能會消失。
-5. **綁定網域**：在平台的 Custom Domain 設定輸入你的網域（例如 `www.minyi-studio.com`），平台會給一組 CNAME（或 A 記錄）目標值；接著到你購買網域的服務商（GoDaddy、Cloudflare、Gandi 等）DNS 設定頁新增該筆紀錄。DNS 生效後平台通常會自動簽發 HTTPS 憑證（Let's Encrypt）。
-6. **驗證上線**：等 DNS 生效（可能數分鐘到數小時），造訪你的網域確認網站與表單功能正常。
+5. **作品檔案存放（Supabase Storage）**：Render 的磁碟在重新部署後會清空，正式環境請將後台上傳的圖片 / 影片存到 Supabase Storage：
+   - Supabase → **Storage** → **New bucket**，名稱 `works`，勾選 **Public bucket**
+   - Render 環境變數新增 `SUPABASE_URL`（Project URL）、`SUPABASE_SERVICE_KEY`（secret key，勿公開）
+   - 免費版單檔上限 50MB，後台影片上限也設為 50MB
+6. **綁定網域**：在平台的 Custom Domain 設定輸入你的網域（例如 `www.minyi-studio.com`），平台會給一組 CNAME（或 A 記錄）目標值；接著到你購買網域的服務商（GoDaddy、Cloudflare、Gandi 等）DNS 設定頁新增該筆紀錄。DNS 生效後平台通常會自動簽發 HTTPS 憑證（Let's Encrypt）。
+7. **驗證上線**：等 DNS 生效（可能數分鐘到數小時），造訪你的網域確認網站與表單功能正常。

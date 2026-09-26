@@ -35,5 +35,10 @@ class Config:
     ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}
     ALLOWED_VIDEO_EXTENSIONS = {"mp4", "webm", "ogg", "mov"}
     MAX_IMAGE_SIZE = 5 * 1024 * 1024
-    MAX_VIDEO_SIZE = 200 * 1024 * 1024
-    MAX_CONTENT_LENGTH = 300 * 1024 * 1024
+    MAX_VIDEO_SIZE = 50 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 60 * 1024 * 1024
+
+    # 有設定時作品檔案上傳至 Supabase Storage，未設定則存在本機 static/uploads
+    SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip()
+    SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "").strip()
+    SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "works").strip()

@@ -34,7 +34,7 @@ class WorkForm(FlaskForm):
         validators=[
             Optional(),
             FileAllowed(["mp4", "webm", "ogg", "mov"], "僅限影片檔案（mp4, webm, ogg, mov）"),
-            FileSize(max_size=200 * 1024 * 1024, message="影片檔案大小不可超過 200MB"),
+            FileSize(max_size=50 * 1024 * 1024, message="影片檔案大小不可超過 50MB（Supabase 免費版單檔上限）"),
         ],
     )
     link = StringField("外部連結", validators=[Optional(), Length(max=255), URL(require_tld=True, message="請輸入有效的網址")])

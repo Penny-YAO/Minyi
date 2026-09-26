@@ -1,5 +1,3 @@
-import os
-import uuid
 from functools import wraps
 
 from flask import (
@@ -17,11 +15,9 @@ from werkzeug.security import check_password_hash
 from app import db
 from app.forms import LoginForm, WorkForm
 from app.models import Work
+from app.storage import StorageError, delete_upload, save_upload
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
-
-UPLOAD_URL_PREFIX = "/static/uploads/works/"
-
 
 def login_required(view):
     @wraps(view)
@@ -34,29 +30,15 @@ def login_required(view):
     return wrapped_view
 
 
-def _save_upload(file_storage, subfolder):
-    """儲存上傳檔案至 static/uploads/works/<subfolder>，回傳可直接用於 <img>/<video> 的網址路徑。"""
-    if not file_storage or not file_storage.filename:
-        return None
-
-    ext = file_storage.filename.rsplit(".", 1)[-1].lower() if "." in file_storage.filename else ""
-    unique_name = f"{uuid.uuid4().hex}.{ext}" if ext else uuid.uuid4().hex
-
-    folder = os.path.join(current_app.config["UPLOAD_FOLDER"], subfolder)
-    os.makedirs(folder, exist_ok=True)
-    file_storage.save(os.path.join(folder, unique_name))
-
-    return f"{UPLOAD_URL_PREFIX}{subfolder}/{unique_name}"
-
-
-def _delete_upload(url_path):
-    """刪除先前上傳的檔案（僅限本站上傳的檔案，外部連結不處理）。"""
-    if not url_path or not url_path.startswith(UPLOAD_URL_PREFIX):
-        return
-    relative_path = url_path[len(UPLOAD_URL_PREFIX):]
-    full_path = os.path.join(current_app.config["UPLOAD_FOLDER"], relative_path)
-    if os.path.isfile(full_path):
-        os.remove(full_path)
+def _upload_media(form):
+    """上傳表單中的圖片與影片，回傳 (image_url, video_url)；失敗時清掉這次已上傳的檔案再拋出錯誤。"""
+    image_url = save_upload(form.image.data, "images")
+    try:
+        video_url = save_upload(form.video.data, "videos")
+    except StorageError:
+        delete_upload(image_url)
+        raise
+    return image_url, video_url
 
 
 @admin_bp.route("/login", methods=["GET", "POST"])
@@ -109,8 +91,11 @@ def new_work():
             link=form.link.data,
             order=form.order.data or 0,
         )
-        work.image_url = _save_upload(form.image.data, "images")
-        work.video_url = _save_upload(form.video.data, "videos")
+        try:
+            work.image_url, work.video_url = _upload_media(form)
+        except StorageError as e:
+            flash(f"檔案上傳失敗：{e}", "error")
+            return render_template("admin/work_form.html", form=form, work=None)
 
         db.session.add(work)
         db.session.commit()
@@ -133,14 +118,18 @@ def edit_work(work_id):
         work.link = form.link.data
         work.order = form.order.data or 0
 
-        new_image_url = _save_upload(form.image.data, "images")
-        if new_image_url:
-            _delete_upload(work.image_url)
-            work.image_url = new_image_url
+        try:
+            new_image_url, new_video_url = _upload_media(form)
+        except StorageError as e:
+            db.session.rollback()
+            flash(f"檔案上傳失敗：{e}", "error")
+            return render_template("admin/work_form.html", form=form, work=work)
 
-        new_video_url = _save_upload(form.video.data, "videos")
+        if new_image_url:
+            delete_upload(work.image_url)
+            work.image_url = new_image_url
         if new_video_url:
-            _delete_upload(work.video_url)
+            delete_upload(work.video_url)
             work.video_url = new_video_url
 
         db.session.commit()
@@ -154,8 +143,8 @@ def edit_work(work_id):
 @login_required
 def delete_work(work_id):
     work = Work.query.get_or_404(work_id)
-    _delete_upload(work.image_url)
-    _delete_upload(work.video_url)
+    delete_upload(work.image_url)
+    delete_upload(work.video_url)
     db.session.delete(work)
     db.session.commit()
     flash("作品已刪除。", "success")
