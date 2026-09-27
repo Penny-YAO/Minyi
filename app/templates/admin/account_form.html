@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}{{ config.STUDIO_NAME }} - 新增帳號{% endblock %}
+{% block title %}{{ config.STUDIO_NAME }} - {{ "申請帳號" if register else "新增帳號" }}{% endblock %}
 
 {% block content %}
 <section class="section container">
     <div class="admin-header">
-        <h2>新增帳號</h2>
+        <h2>{{ "申請帳號" if register else "新增帳號" }}</h2>
+        {% if register %}
+        <a href="{{ url_for('admin.login') }}" class="btn btn-outline">返回登入</a>
+        {% else %}
         <a href="{{ url_for('admin.accounts') }}" class="btn btn-outline">返回列表</a>
+        {% endif %}
     </div>
+
+    {% if register %}
+    <p class="section-intro">送出後需由管理員在「帳號管理」啟用，啟用後即可登入後台。</p>
+    {% endif %}
 
     <form method="POST" class="contact-form" novalidate>
         {{ form.hidden_tag() }}
@@ -36,7 +44,7 @@
             {% for error in form.created_at.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
         </div>
 
-        {{ form.submit(class_="btn") }}
+        {{ form.submit(class_="btn", value="送出申請" if register else "新增帳號") }}
     </form>
 </section>
 {% endblock %}

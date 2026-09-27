@@ -54,6 +54,10 @@ def login():
     if form.validate_on_submit():
         user = AdminUser.query.filter_by(username=form.username.data).first()
 
+        if user and not user.is_active and user.check_password(form.password.data):
+            flash("此帳號尚未啟用，請等待管理員啟用後再登入。", "error")
+            return render_template("admin/login.html", form=form)
+
         if user and user.is_active and user.check_password(form.password.data):
             user.last_login_at = datetime.utcnow()
             db.session.commit()
@@ -181,4 +185,41 @@ def new_account():
         flash(f"帳號 {user.username} 已新增！", "success")
         return redirect(url_for("admin.accounts"))
 
-    return render_template("admin/account_form.html", form=form)
+    return render_template("admin/account_form.html", form=form, register=False)
+
+
+@admin_bp.route("/register", methods=["GET", "POST"])
+def register():
+    """未登入者從登入頁申請帳號，建立後為停用狀態，需管理員在帳號管理啟用。"""
+    if session.get("admin_logged_in"):
+        return redirect(url_for("admin.new_account"))
+
+    form = AdminUserForm()
+    if form.validate_on_submit():
+        user = AdminUser(
+            username=form.username.data,
+            email=form.email.data,
+            created_at=datetime.combine(form.created_at.data, time()),
+            is_active=False,
+        )
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("申請已送出，待管理員啟用後即可登入。", "success")
+        return redirect(url_for("admin.login"))
+
+    return render_template("admin/account_form.html", form=form, register=True)
+
+
+@admin_bp.route("/accounts/<int:user_id>/toggle", methods=["POST"])
+@login_required
+def toggle_account(user_id):
+    user = AdminUser.query.get_or_404(user_id)
+    if user.id == session.get("admin_user_id"):
+        flash("無法停用目前登入的帳號。", "error")
+        return redirect(url_for("admin.accounts"))
+
+    user.is_active = not user.is_active
+    db.session.commit()
+    flash(f"帳號 {user.username} 已{'啟用' if user.is_active else '停用'}。", "success")
+    return redirect(url_for("admin.accounts"))

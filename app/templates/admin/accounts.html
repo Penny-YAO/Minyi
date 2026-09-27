@@ -22,6 +22,7 @@
                     <th>建立日期</th>
                     <th>最後登入</th>
                     <th>狀態</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +32,24 @@
                     <td>{{ user.email or "-" }}</td>
                     <td>{{ user.created_at.strftime("%Y-%m-%d") if user.created_at else "-" }}</td>
                     <td>{{ user.last_login_at.strftime("%Y-%m-%d %H:%M") if user.last_login_at else "-" }}</td>
-                    <td>{{ "啟用" if user.is_active else "停用" }}</td>
+                    <td>
+                        {% if user.is_active %}啟用
+                        {% elif not user.last_login_at %}待啟用
+                        {% else %}停用{% endif %}
+                    </td>
+                    <td class="admin-actions">
+                        {% if user.id != session.get('admin_user_id') %}
+                        <form method="POST" action="{{ url_for('admin.toggle_account', user_id=user.id) }}">
+                            {% if user.is_active %}
+                            <button type="submit" class="btn btn-small btn-danger">停用</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-small">啟用</button>
+                            {% endif %}
+                        </form>
+                        {% else %}
+                        <span class="empty-state">目前登入</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
