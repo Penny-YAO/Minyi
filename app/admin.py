@@ -1,8 +1,8 @@
+from datetime import datetime
 from functools import wraps
 
 from flask import (
     Blueprint,
-    current_app,
     flash,
     redirect,
     render_template,
@@ -10,11 +10,10 @@ from flask import (
     session,
     url_for,
 )
-from werkzeug.security import check_password_hash
 
 from app import db
 from app.forms import LoginForm, WorkForm
-from app.models import Work
+from app.models import AdminUser, Work
 from app.storage import StorageError, delete_upload, save_upload
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -22,7 +21,12 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 def login_required(view):
     @wraps(view)
     def wrapped_view(*args, **kwargs):
-        if not session.get("admin_logged_in"):
+        user_id = session.get("admin_user_id")
+        user = db.session.get(AdminUser, user_id) if user_id else None
+        if not user or not user.is_active:
+            # 帳號被刪除或停用時，已登入的 session 也一併失效
+            session.pop("admin_logged_in", None)
+            session.pop("admin_user_id", None)
             flash("請先登入後台管理。", "error")
             return redirect(url_for("admin.login", next=request.path))
         return view(*args, **kwargs)
@@ -48,13 +52,15 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        password_hash = current_app.config["ADMIN_PASSWORD_HASH"]
-        username_ok = form.username.data == current_app.config["ADMIN_USERNAME"]
-        password_ok = bool(password_hash) and check_password_hash(password_hash, form.password.data)
+        user = AdminUser.query.filter_by(username=form.username.data).first()
 
-        if username_ok and password_ok:
+        if user and user.is_active and user.check_password(form.password.data):
+            user.last_login_at = datetime.utcnow()
+            db.session.commit()
+
             session.clear()
             session["admin_logged_in"] = True
+            session["admin_user_id"] = user.id
             session.permanent = True
             flash("登入成功！", "success")
             next_url = request.args.get("next")
@@ -68,6 +74,7 @@ def login():
 @admin_bp.route("/logout")
 def logout():
     session.pop("admin_logged_in", None)
+    session.pop("admin_user_id", None)
     flash("已登出。", "success")
     return redirect(url_for("admin.login"))
 

@@ -8,7 +8,7 @@
 Minyi/
 ├── app/
 │   ├── __init__.py        # App Factory，初始化 Flask、資料庫
-│   ├── models.py          # 資料模型：TeamMember, Work, ContactMessage
+│   ├── models.py          # 資料模型：TeamMember, Work, ContactMessage, AdminUser
 │   ├── forms.py           # 聯絡表單 (Flask-WTF)
 │   ├── routes.py          # 路由與頁面邏輯
 │   ├── templates/         # Jinja2 樣板
@@ -70,6 +70,20 @@ python migrate_db.py                              # 套用到本機資料庫
 ```
 
 把新產生的 migration 檔一起 commit、push，Render 部署時會自動套用到正式資料庫。
+
+### 後台帳號
+
+後台 `/admin` 的帳號密碼存在資料表 `admin_users`（密碼只存雜湊值）。新增帳號或重設密碼：
+
+```powershell
+flask --app run set-admin 帳號    # 會提示輸入兩次密碼
+```
+
+操作正式環境（Supabase）的帳號時，先把本機 `.env` 的 `DATABASE_URL` 暫時改成 Supabase 的連線字串再執行。
+要停用帳號，可在 Supabase → Table Editor → `admin_users` 把 `is_active` 改為 `false`，已登入的 session 也會立即失效。
+
+建立 `admin_users` 資料表的 migration 會把環境變數 `ADMIN_USERNAME` / `ADMIN_PASSWORD_HASH` 匯入成第一個帳號（只執行一次），
+在 Supabase 上也會開啟 Row Level Security，避免密碼雜湊透過 Supabase REST API 被讀取。
 未來若要更換為 PostgreSQL / MySQL，只需修改 `.env` 中的 `DATABASE_URL`。
 
 ## 功能頁面

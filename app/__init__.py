@@ -27,6 +27,9 @@ def create_app(config_class=Config):
     from app.admin import admin_bp
     app.register_blueprint(admin_bp)
 
+    from app.commands import admin_cli
+    app.register_blueprint(admin_cli)
+
     @app.context_processor
     def inject_now():
         return {"now": datetime.utcnow()}

@@ -28,9 +28,6 @@ class Config:
     STUDIO_TAGLINE = "設計，源於用心"
     CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "hello@minyi-studio.com")
 
-    ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-    ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH", "")
-
     UPLOAD_FOLDER = os.path.join(basedir, "app", "static", "uploads", "works")
     ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}
     ALLOWED_VIDEO_EXTENSIONS = {"mp4", "webm", "ogg", "mov"}
