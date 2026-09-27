@@ -1,4 +1,5 @@
 import os
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 
@@ -15,6 +16,15 @@ def _database_url():
         if url.startswith(prefix):
             return "postgresql+psycopg://" + url[len(prefix):]
     return url
+
+
+def _supabase_url():
+    url = os.environ.get("SUPABASE_URL", "").strip()
+    if not url:
+        return ""
+    # 只保留 https://xxxx.supabase.co，避免誤填成 .../storage/v1/s3 或 .../rest/v1/ 等 API 網址
+    parts = urlsplit(url if "://" in url else "https://" + url)
+    return f"{parts.scheme}://{parts.netloc}"
 
 
 class Config:
@@ -36,6 +46,6 @@ class Config:
     MAX_CONTENT_LENGTH = 60 * 1024 * 1024
 
     # 有設定時作品檔案上傳至 Supabase Storage，未設定則存在本機 static/uploads
-    SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip()
+    SUPABASE_URL = _supabase_url()
     SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "").strip()
     SUPABASE_BUCKET = os.environ.get("SUPABASE_BUCKET", "works").strip()
