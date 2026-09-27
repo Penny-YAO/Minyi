@@ -303,7 +303,8 @@ body {
 }
 
 .work-showcase .carousel {
-    max-width: 560px;
+    /* 作品多為網頁截圖，縮太小文字會糊掉，放到與版面同寬 */
+    max-width: 100%;
     margin: 0 auto;
     box-shadow: 0 12px 28px rgba(27, 58, 107, 0.1);
 }
