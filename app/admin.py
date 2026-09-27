@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from functools import wraps
 
 from flask import (
@@ -12,7 +12,7 @@ from flask import (
 )
 
 from app import db
-from app.forms import LoginForm, WorkForm
+from app.forms import AdminUserForm, LoginForm, WorkForm
 from app.models import AdminUser, Work
 from app.storage import StorageError, delete_upload, save_upload
 
@@ -156,3 +156,29 @@ def delete_work(work_id):
     db.session.commit()
     flash("作品已刪除。", "success")
     return redirect(url_for("admin.dashboard"))
+
+
+@admin_bp.route("/accounts")
+@login_required
+def accounts():
+    users = AdminUser.query.order_by(AdminUser.created_at.asc()).all()
+    return render_template("admin/accounts.html", users=users)
+
+
+@admin_bp.route("/accounts/new", methods=["GET", "POST"])
+@login_required
+def new_account():
+    form = AdminUserForm()
+    if form.validate_on_submit():
+        user = AdminUser(
+            username=form.username.data,
+            email=form.email.data,
+            created_at=datetime.combine(form.created_at.data, time()),
+        )
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash(f"帳號 {user.username} 已新增！", "success")
+        return redirect(url_for("admin.accounts"))
+
+    return render_template("admin/account_form.html", form=form)

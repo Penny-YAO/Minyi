@@ -73,7 +73,8 @@ python migrate_db.py                              # 套用到本機資料庫
 
 ### 後台帳號
 
-後台 `/admin` 的帳號密碼存在資料表 `admin_users`（密碼只存雜湊值）。新增帳號或重設密碼：
+後台 `/admin` 的帳號密碼存在資料表 `admin_users`（密碼只存雜湊值）。登入後可在「帳號管理」（`/admin/accounts`）檢視帳號並新增帳號。
+也可以用指令新增帳號或重設密碼：
 
 ```powershell
 flask --app run set-admin 帳號    # 會提示輸入兩次密碼

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - 帳號管理{% endblock %}
+
+{% block content %}
+<section class="section container">
+    <div class="admin-header">
+        <h2>帳號管理</h2>
+        <div>
+            <a href="{{ url_for('admin.new_account') }}" class="btn">+ 新增帳號</a>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">作品管理</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-outline">登出</a>
+        </div>
+    </div>
+
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>帳號</th>
+                    <th>信箱</th>
+                    <th>建立日期</th>
+                    <th>最後登入</th>
+                    <th>狀態</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email or "-" }}</td>
+                    <td>{{ user.created_at.strftime("%Y-%m-%d") if user.created_at else "-" }}</td>
+                    <td>{{ user.last_login_at.strftime("%Y-%m-%d %H:%M") if user.last_login_at else "-" }}</td>
+                    <td>{{ "啟用" if user.is_active else "停用" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

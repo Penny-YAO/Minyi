@@ -56,6 +56,7 @@ class AdminUser(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     # 只存 werkzeug 產生的密碼雜湊，不存明碼
     password_hash = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(120), nullable=True)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login_at = db.Column(db.DateTime, nullable=True)
