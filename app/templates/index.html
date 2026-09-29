@@ -66,41 +66,24 @@
     </div>
 </section>
 
-<section class="section-block section-white work-showcase">
+<section class="section-block section-white partner-timeline">
     <div class="container">
-        <h2 class="reveal">精選作品</h2>
-        <div class="carousel work-carousel reveal" data-carousel>
-            <div class="carousel-track">
-                {% if featured_works %}
-                    {% for work in featured_works %}
-                    <div class="carousel-slide{{ ' active' if loop.first }}">
-                        <img src="{{ work.image_url }}" alt="{{ work.title }}">
-                        <div class="carousel-caption">
-                            <strong>{{ work.title }}</strong>
-                            {% if work.category %}<span>{{ work.category }}</span>{% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="carousel-slide active carousel-empty">
-                        <p>作品集籌備中，敬請期待</p>
-                    </div>
-                {% endif %}
-            </div>
-            {% if featured_works|length > 1 %}
-            <button type="button" class="carousel-arrow carousel-prev" aria-label="上一張">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <button type="button" class="carousel-arrow carousel-next" aria-label="下一張">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-            <div class="carousel-dots">
-                {% for work in featured_works %}
-                <button type="button" class="carousel-dot{{ ' active' if loop.first }}" aria-label="第 {{ loop.index }} 張"></button>
-                {% endfor %}
-            </div>
-            {% endif %}
-        </div>
+        <h2 class="reveal">合作廠商</h2>
+        {% if partners %}
+        <ol class="timeline">
+            {% for partner in partners %}
+            <li class="timeline-item reveal">
+                <time class="timeline-date" datetime="{{ partner.started_on.isoformat() }}">{{ partner.started_on.strftime("%Y.%m") }}</time>
+                <div class="timeline-card">
+                    <strong>{{ partner.name }}</strong>
+                    <span>{{ partner.software }}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+        {% else %}
+        <p class="empty-state reveal">合作廠商整理中，敬請期待</p>
+        {% endif %}
     </div>
 </section>
 

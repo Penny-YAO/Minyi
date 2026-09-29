@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 
 from app import db
-from app.models import TeamMember, Work, ContactMessage
+from app.models import TeamMember, Work, ContactMessage, Partner
 from app.forms import ContactForm
 
 main_bp = Blueprint("main", __name__)
@@ -32,12 +32,7 @@ def index():
             "icon": "bulb",
         },
     ]
-    featured_works = (
-        Work.query.filter(Work.image_url.isnot(None), Work.image_url != "")
-        .order_by(Work.order.asc(), Work.created_at.desc())
-        .limit(6)
-        .all()
-    )
+    partners = Partner.query.order_by(Partner.started_on.desc(), Partner.id.desc()).all()
     specialties = [
         {
             "title": "個人網站架設",
@@ -63,7 +58,7 @@ def index():
     return render_template(
         "index.html",
         philosophy_points=philosophy_points,
-        featured_works=featured_works,
+        partners=partners,
         specialties=specialties,
     )
 

@@ -35,6 +35,19 @@ class Work(db.Model):
         return f"<Work {self.title}>"
 
 
+class Partner(db.Model):
+    __tablename__ = "partners"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    software = db.Column(db.String(150), nullable=False)
+    started_on = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Partner {self.name}>"
+
+
 class ContactMessage(db.Model):
     __tablename__ = "contact_messages"
 

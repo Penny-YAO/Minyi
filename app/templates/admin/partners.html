@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.STUDIO_NAME }} - 合作廠商{% endblock %}
+
+{% block content %}
+<section class="section container">
+    <div class="admin-header">
+        <h2>合作廠商</h2>
+        <div>
+            <a href="{{ url_for('admin.new_partner') }}" class="btn">+ 新增合作廠商</a>
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">作品管理</a>
+            <a href="{{ url_for('admin.logout') }}" class="btn btn-outline">登出</a>
+        </div>
+    </div>
+
+    {% if partners %}
+    <div class="admin-table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>合作日期</th>
+                    <th>合作廠商</th>
+                    <th>建置的軟體名稱</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for partner in partners %}
+                <tr>
+                    <td>{{ partner.started_on.strftime("%Y-%m-%d") }}</td>
+                    <td>{{ partner.name }}</td>
+                    <td>{{ partner.software }}</td>
+                    <td class="admin-actions">
+                        <a href="{{ url_for('admin.edit_partner', partner_id=partner.id) }}" class="btn btn-small">編輯</a>
+                        <form method="POST" action="{{ url_for('admin.delete_partner', partner_id=partner.id) }}"
+                              onsubmit="return confirm('確定要刪除「{{ partner.name }}」嗎？此動作無法復原。');">
+                            <button type="submit" class="btn btn-small btn-danger">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="empty-state">目前尚未新增任何合作廠商，點選右上方「新增合作廠商」開始建立。</p>
+    {% endif %}
+</section>
+{% endblock %}

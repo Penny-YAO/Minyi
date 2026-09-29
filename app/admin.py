@@ -12,8 +12,8 @@ from flask import (
 )
 
 from app import db
-from app.forms import AdminUserForm, LoginForm, WorkForm
-from app.models import AdminUser, Work
+from app.forms import AdminUserForm, LoginForm, PartnerForm, WorkForm
+from app.models import AdminUser, Partner, Work
 from app.storage import StorageError, delete_upload, save_upload
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -160,6 +160,58 @@ def delete_work(work_id):
     db.session.commit()
     flash("作品已刪除。", "success")
     return redirect(url_for("admin.dashboard"))
+
+
+@admin_bp.route("/partners")
+@login_required
+def partners():
+    partners = Partner.query.order_by(Partner.started_on.desc(), Partner.id.desc()).all()
+    return render_template("admin/partners.html", partners=partners)
+
+
+@admin_bp.route("/partners/new", methods=["GET", "POST"])
+@login_required
+def new_partner():
+    form = PartnerForm()
+    if form.validate_on_submit():
+        partner = Partner(
+            name=form.name.data,
+            software=form.software.data,
+            started_on=form.started_on.data,
+        )
+        db.session.add(partner)
+        db.session.commit()
+        flash("合作廠商已新增！", "success")
+        return redirect(url_for("admin.partners"))
+
+    return render_template("admin/partner_form.html", form=form, partner=None)
+
+
+@admin_bp.route("/partners/<int:partner_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_partner(partner_id):
+    partner = Partner.query.get_or_404(partner_id)
+    form = PartnerForm(obj=partner)
+
+    if form.validate_on_submit():
+        partner.name = form.name.data
+        partner.software = form.software.data
+        partner.started_on = form.started_on.data
+        db.session.commit()
+        flash("合作廠商已更新！", "success")
+        return redirect(url_for("admin.partners"))
+
+    return render_template("admin/partner_form.html", form=form, partner=partner)
+
+
+@admin_bp.route("/partners/<int:partner_id>/delete", methods=["POST"])
+@login_required
+def delete_partner(partner_id):
+    partner = Partner.query.get_or_404(partner_id)
+    db.session.delete(partner)
+    db.session.commit()
+    flash("合作廠商已刪除。", "success")
+    return redirect(url_for("admin.partners"))
 
 
 @admin_bp.route("/accounts")

@@ -60,3 +60,10 @@ class WorkForm(FlaskForm):
         default=0,
     )
     submit = SubmitField("儲存")
+
+
+class PartnerForm(FlaskForm):
+    name = StringField("合作廠商", validators=[DataRequired(), Length(max=120)])
+    software = StringField("建置的軟體名稱", validators=[DataRequired(), Length(max=150)])
+    started_on = DateField("合作日期", validators=[DataRequired()], default=date.today)
+    submit = SubmitField("儲存")
