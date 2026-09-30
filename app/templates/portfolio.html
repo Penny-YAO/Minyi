@@ -2,11 +2,20 @@
 
 {% block title %}{{ config.STUDIO_NAME }} - 案例實績{% endblock %}
 
+{% block header_class %} site-header-overlay{% endblock %}
+
+{% block hero %}
+<section class="page-hero">
+    <div class="container page-hero-inner reveal-down">
+        <p class="page-hero-eyebrow">Portfolio</p>
+        <h1>案例實績</h1>
+        <p class="page-hero-text">精選過去完成的專案與作品。</p>
+    </div>
+</section>
+{% endblock %}
+
 {% block content %}
 <section class="section container">
-    <h2>案例實績</h2>
-    <p class="section-intro">精選過去完成的專案與作品。</p>
-
     {% if works %}
     <div class="grid grid-3">
         {% for work in works %}

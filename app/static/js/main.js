@@ -1,3 +1,22 @@
+// 首頁浮動選單：記錄選單高度供背景區塊預留空間，捲動後切換為白底
+(function () {
+    const header = document.querySelector(".site-header-overlay");
+    if (!header) return;
+
+    function syncHeight() {
+        document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    }
+
+    function syncScrolled() {
+        header.classList.toggle("is-scrolled", window.scrollY > 10);
+    }
+
+    syncHeight();
+    syncScrolled();
+    window.addEventListener("resize", syncHeight);
+    window.addEventListener("scroll", syncScrolled, { passive: true });
+})();
+
 // 通用輪播元件：任何帶有 data-carousel 屬性的容器都會套用
 (function () {
     const INTERVAL = 5000;

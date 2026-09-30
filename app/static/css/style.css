@@ -35,6 +35,33 @@ body {
     z-index: 10;
 }
 
+/* 首頁：選單透明浮在背景圖上方，往下捲動後恢復白底 */
+.site-header-overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: transparent;
+    border-bottom-color: transparent;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-header-overlay .nav a {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.site-header-overlay .nav a:hover,
+.site-header-overlay .nav a.active {
+    color: var(--color-accent);
+}
+
+.site-header-overlay.is-scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom-color: var(--color-border);
+    box-shadow: 0 4px 20px rgba(27, 58, 107, 0.08);
+    backdrop-filter: blur(8px);
+}
+
 .header-inner {
     display: flex;
     align-items: center;
@@ -97,14 +124,70 @@ body {
 }
 
 /* Hero split layout: 核心理念 (left) + 作品輪播 (right) */
-.hero-intro {
+.hero-intro,
+.page-hero {
     position: relative;
     overflow: hidden;
-    padding-top: 64px;
-    padding-bottom: 64px;
 }
 
-.hero-intro::before {
+/* 背景圖延伸到頁面頂端、墊在浮動選單下方；--header-h 由 main.js 依選單實際高度設定 */
+.hero-intro {
+    padding-top: calc(var(--header-h, 77px) + 88px);
+    padding-bottom: 96px;
+}
+
+/* 內頁頁首：與首頁相同的背景圖，放頁面標題與說明 */
+.page-hero {
+    padding-top: calc(var(--header-h, 77px) + 56px);
+    padding-bottom: 64px;
+    text-align: center;
+}
+
+.page-hero-inner {
+    max-width: 820px;
+}
+
+.page-hero-eyebrow {
+    margin: 0 0 10px;
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.page-hero h1 {
+    margin: 0 0 16px;
+    color: var(--color-primary);
+    font-size: 2rem;
+    line-height: 1.4;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.7);
+}
+
+.page-hero-text {
+    margin: 0 auto;
+    color: var(--color-text);
+    line-height: 1.9;
+}
+
+.page-hero-text a {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+@media (max-width: 560px) {
+    .page-hero {
+        padding-top: calc(var(--header-h, 120px) + 36px);
+        padding-bottom: 44px;
+    }
+
+    .page-hero h1 {
+        font-size: 1.5rem;
+    }
+}
+
+.hero-intro::before,
+.page-hero::before {
     content: "";
     position: absolute;
     inset: -20px;
@@ -116,14 +199,16 @@ body {
     will-change: transform;
 }
 
-.hero-intro::after {
+.hero-intro::after,
+.page-hero::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.68) 100%);
 }
 
-.hero-intro .container {
+.hero-intro .container,
+.page-hero .container {
     position: relative;
     z-index: 1;
 }
@@ -138,7 +223,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .hero-intro::before {
+    .hero-intro::before,
+    .page-hero::before {
         animation: none;
     }
 }
@@ -893,64 +979,8 @@ body {
 }
 
 /* Team */
-.team-banner {
-    position: relative;
-    overflow: hidden;
-    padding: 64px 0 56px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, #0f2548 100%);
-    color: #fff;
-    text-align: center;
-}
-
-.team-banner::before,
-.team-banner::after {
-    content: "";
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.team-banner::before {
-    width: 420px;
-    height: 420px;
-    top: -200px;
-    right: -120px;
-    background: radial-gradient(circle, rgba(47, 128, 237, 0.45), rgba(47, 128, 237, 0) 70%);
-}
-
-.team-banner::after {
-    width: 360px;
-    height: 360px;
-    bottom: -220px;
-    left: -100px;
-    background: radial-gradient(circle, rgba(47, 128, 237, 0.3), rgba(47, 128, 237, 0) 70%);
-}
-
-.team-banner-inner {
-    position: relative;
-    z-index: 1;
-    max-width: 820px;
-}
-
-.team-banner-eyebrow {
-    margin: 0 0 10px;
-    color: #8fb8f5;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-}
-
-.team-banner h1 {
-    margin: 0 0 18px;
-    font-size: 2rem;
-    line-height: 1.4;
-}
-
-.team-banner-text {
-    margin: 0 auto 28px;
-    color: rgba(255, 255, 255, 0.82);
-    line-height: 1.9;
+.team-banner .page-hero-text {
+    margin-bottom: 28px;
 }
 
 .team-banner-skills {
@@ -965,9 +995,10 @@ body {
 
 .team-banner-skills li {
     padding: 6px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(27, 58, 107, 0.2);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--color-primary);
     font-size: 0.9rem;
     font-weight: 600;
 }
@@ -981,7 +1012,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 8px 14px;
-    color: #8fb8f5;
+    color: var(--color-accent);
     font-size: 0.9rem;
     font-weight: 600;
 }
@@ -989,7 +1020,7 @@ body {
 .team-banner-flow li + li::before {
     content: "→";
     margin-right: 14px;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-muted);
 }
 
 .section-team {
@@ -1319,14 +1350,6 @@ body {
 }
 
 @media (max-width: 560px) {
-    .team-banner {
-        padding: 44px 0 40px;
-    }
-
-    .team-banner h1 {
-        font-size: 1.5rem;
-    }
-
     .team-grid {
         grid-template-columns: 1fr;
     }
@@ -1464,6 +1487,95 @@ body {
 }
 
 /* Footer */
+/* 首頁底部聯絡資訊 */
+.home-contact {
+    padding: 56px 0 64px;
+    background: #0f2548;
+    color: #fff;
+}
+
+.home-contact-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.home-contact-head h2 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.home-contact-actions {
+    display: flex;
+    gap: 14px;
+}
+
+.home-contact-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(245, 184, 46, 0.12);
+    color: #f5b82e;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.home-contact-actions a:hover {
+    background: #f5b82e;
+    color: #0f2548;
+}
+
+.home-contact-actions svg {
+    width: 22px;
+    height: 22px;
+}
+
+.home-contact-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+}
+
+.home-contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    letter-spacing: 0.06em;
+}
+
+.home-contact-list svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.home-contact-label {
+    width: 48px;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.9rem;
+}
+
+.home-contact-list a {
+    color: #fff;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.home-contact-list a:hover {
+    color: #f5b82e;
+}
+
 .site-footer {
     border-top: 1px solid var(--color-border);
     padding: 24px 0;

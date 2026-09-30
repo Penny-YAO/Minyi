@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <header class="site-header">
+    <header class="site-header{% block header_class %}{% endblock %}">
         <div class="container header-inner">
             <a class="logo" href="{{ url_for('main.index') }}">
                 <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="{{ config.STUDIO_NAME }}" class="logo-img">
@@ -38,6 +38,9 @@
     </header>
 
     <main>
+        {# 頁首背景區塊：使用浮動選單的頁面放在這裡，提示訊息接在其下方，不會被選單蓋住 #}
+        {% block hero %}{% endblock %}
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <div class="container">

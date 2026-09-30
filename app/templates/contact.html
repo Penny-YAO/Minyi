@@ -2,14 +2,23 @@
 
 {% block title %}{{ config.STUDIO_NAME }} - 聯絡方式{% endblock %}
 
+{% block header_class %} site-header-overlay{% endblock %}
+
+{% block hero %}
+<section class="page-hero">
+    <div class="container page-hero-inner reveal-down">
+        <p class="page-hero-eyebrow">Contact</p>
+        <h1>聯絡方式</h1>
+        <p class="page-hero-text">
+            歡迎透過 Email <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> 與我們聯繫，
+            或直接填寫下方表單，我們會盡快回覆您。
+        </p>
+    </div>
+</section>
+{% endblock %}
+
 {% block content %}
 <section class="section container">
-    <h2>聯絡方式</h2>
-    <p class="section-intro">
-        歡迎透過 Email <a href="mailto:{{ contact_email }}">{{ contact_email }}</a> 與我們聯繫，
-        或直接填寫下方表單，我們會盡快回覆您。
-    </p>
-
     <form method="POST" class="contact-form" novalidate>
         {{ form.hidden_tag() }}
 

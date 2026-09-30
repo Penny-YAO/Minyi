@@ -36,7 +36,10 @@ class Config:
 
     STUDIO_NAME = "明宜資訊"
     STUDIO_TAGLINE = "設計，源於用心"
-    CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "hello@minyi-studio.com")
+    CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "milk88695555@gmail.com")
+    CONTACT_PHONE = "04-7582446"
+    CONTACT_FAX = "04-7582446"
+    CONTACT_ADDRESS = "彰化縣線西鄉寓埔村中央路三段217巷38號"
 
     UPLOAD_FOLDER = os.path.join(basedir, "app", "static", "uploads", "works")
     ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif", "webp"}

@@ -15,12 +15,14 @@
 </div>
 {% endmacro %}
 
-{% block content %}
-<section class="team-banner">
-    <div class="container team-banner-inner reveal-down">
-        <p class="team-banner-eyebrow">Our Team</p>
+{% block header_class %} site-header-overlay{% endblock %}
+
+{% block hero %}
+<section class="page-hero team-banner">
+    <div class="container page-hero-inner reveal-down">
+        <p class="page-hero-eyebrow">Our Team</p>
         <h1>跨領域整合，團隊協作完成每個環節</h1>
-        <p class="team-banner-text">我們是一支匯集系統分析、專案管理、網站設計與技術開發專業的團隊，透過不同領域成員的經驗與專長相互整合，從需求理解、規劃設計到開發執行，各環節皆以團隊協作的方式共同完成。</p>
+        <p class="page-hero-text">我們是一支匯集系統分析、專案管理、網站設計與技術開發專業的團隊，透過不同領域成員的經驗與專長相互整合，從需求理解、規劃設計到開發執行，各環節皆以團隊協作的方式共同完成。</p>
         <ul class="team-banner-skills">
             <li>系統分析</li>
             <li>專案管理</li>
@@ -34,7 +36,9 @@
         </ol>
     </div>
 </section>
+{% endblock %}
 
+{% block content %}
 <section class="section section-team container">
     <div class="team-grid">
         {% for member in members %}
