@@ -12,6 +12,8 @@ class TeamMember(db.Model):
     role = db.Column(db.String(120), nullable=False)
     bio = db.Column(db.Text, nullable=True)
     photo_url = db.Column(db.String(255), nullable=True)
+    # 完整經歷：summary / specialties / experience / certifications，格式見 app/team_profiles.py
+    profile = db.Column(db.JSON, nullable=True)
     order = db.Column(db.Integer, default=0, nullable=False)
 
     def __repr__(self):

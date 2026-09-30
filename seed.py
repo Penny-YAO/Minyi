@@ -1,6 +1,7 @@
 """建立範例資料：團隊成員與作品。使用方式： python seed.py"""
 from app import create_app, db
 from app.models import TeamMember, Work
+from app.team_profiles import PENNY_PHOTO, PENNY_PROFILE
 
 app = create_app()
 
@@ -15,6 +16,8 @@ with app.app_context():
             TeamMember(
                 name="佩純 Penny",
                 role="系統分析規劃",
+                photo_url=PENNY_PHOTO,
+                profile=PENNY_PROFILE,
                 order=2,
             ),
             TeamMember(

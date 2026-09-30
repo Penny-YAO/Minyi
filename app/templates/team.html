@@ -2,51 +2,158 @@
 
 {% block title %}{{ config.STUDIO_NAME }} - 團隊成員{% endblock %}
 
-{% block content %}
-<section class="section section-team container">
-    <p class="team-description reveal-down">我們是一群深耕網站架設領域多年的專業團隊，成員橫跨技術開發與專案管理，熟悉各類型網站建置流程。從需求溝通、規劃設計到後續維護，都能提供細膩且穩定的服務品質，協助客戶順利將想法化為線上呈現。</p>
+{% macro member_photo(member) %}
+<div class="team-photo">
+    {% if member.photo_url %}
+    <img src="{{ member.photo_url }}" alt="{{ member.name }}">
+    {% else %}
+    <div class="team-photo-slot">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
+        <span>照片預留位置</span>
+    </div>
+    {% endif %}
+</div>
+{% endmacro %}
 
+{% block content %}
+<section class="team-banner">
+    <div class="container team-banner-inner reveal-down">
+        <p class="team-banner-eyebrow">Our Team</p>
+        <h1>跨領域整合，團隊協作完成每個環節</h1>
+        <p class="team-banner-text">我們是一支匯集系統分析、專案管理、網站設計與技術開發專業的團隊，透過不同領域成員的經驗與專長相互整合，從需求理解、規劃設計到開發執行，各環節皆以團隊協作的方式共同完成。</p>
+        <ul class="team-banner-skills">
+            <li>系統分析</li>
+            <li>專案管理</li>
+            <li>網站設計</li>
+            <li>技術開發</li>
+        </ul>
+        <ol class="team-banner-flow">
+            <li>需求理解</li>
+            <li>規劃設計</li>
+            <li>開發執行</li>
+        </ol>
+    </div>
+</section>
+
+<section class="section section-team container">
     <div class="team-grid">
         {% for member in members %}
-        <div class="team-card">
-            <div class="team-photo-wrap">
-                {% if member.photo_url %}
-                <img src="{{ member.photo_url }}" alt="{{ member.name }}">
-                {% else %}
-                <div class="team-photo-placeholder">{{ member.name[:1] }}</div>
-                {% endif %}
-                <div class="team-tint"></div>
-                <div class="team-scrim"></div>
-                <div class="team-overlay">
-                    <h3>{{ member.name }}</h3>
-                    <span class="team-underline"></span>
-                    <div class="team-tags">
-                        {% for tag in member.role.split('/') %}
-                        <span class="team-tag">{{ tag.strip() }}</span>
-                        {% endfor %}
-                    </div>
+        <article class="team-card">
+            {{ member_photo(member) }}
+            <div class="team-card-body">
+                <h3>{{ member.name }}</h3>
+                <span class="team-underline"></span>
+                <div class="team-tags">
+                    {% for tag in member.role.split('/') %}
+                    <span class="team-tag">{{ tag.strip() }}</span>
+                    {% endfor %}
                 </div>
+                {% if member.profile and member.profile.summary %}
+                <p class="team-intro">{{ member.profile.summary[0] }}</p>
+                {% elif member.bio %}
+                <p class="team-intro">{{ member.bio }}</p>
+                {% endif %}
+                {% if member.profile %}
+                <button type="button" class="team-more" data-profile="profile-{{ member.id }}">
+                    查看完整經歷
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+                {% endif %}
             </div>
-            {% if member.bio %}
-            <p class="team-bio"><span>{{ member.bio }}</span></p>
-            {% endif %}
-        </div>
+        </article>
         {% endfor %}
 
         {% for _ in range(placeholder_count) %}
-        <div class="team-card">
-            <div class="team-photo-wrap team-photo-wrap-empty">
-                <div class="team-overlay">
-                    <h3>敬請期待</h3>
-                    <span class="team-underline"></span>
-                    <div class="team-tags">
-                        <span class="team-tag">New Member</span>
-                    </div>
+        <article class="team-card team-card-empty">
+            <div class="team-photo">
+                <div class="team-photo-slot">
+                    <span>New Member</span>
                 </div>
             </div>
-            <p class="team-bio"><span>團隊持續擴編中，敬請期待新夥伴加入。</span></p>
-        </div>
+            <div class="team-card-body">
+                <h3>敬請期待</h3>
+                <span class="team-underline"></span>
+                <p class="team-intro">團隊持續擴編中，敬請期待新夥伴加入。</p>
+            </div>
+        </article>
         {% endfor %}
     </div>
+
+    {% for member in members if member.profile %}
+    {% set p = member.profile %}
+    <dialog class="profile-dialog" id="profile-{{ member.id }}" aria-labelledby="profile-{{ member.id }}-name">
+        <button type="button" class="profile-close" aria-label="關閉">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+
+        <header class="profile-header">
+            {{ member_photo(member) }}
+            <div>
+                <h2 id="profile-{{ member.id }}-name">{{ member.name }}</h2>
+                <div class="team-tags">
+                    {% for tag in member.role.split('/') %}
+                    <span class="team-tag">{{ tag.strip() }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </header>
+
+        {% if p.summary %}
+        <section class="profile-section">
+            <h4>專業經歷</h4>
+            {% for paragraph in p.summary %}
+            <p>{{ paragraph }}</p>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if p.specialties %}
+        <section class="profile-section">
+            <h4>核心專長</h4>
+            <ul class="profile-specialties">
+                {% for item in p.specialties %}
+                <li>
+                    <strong>{{ item.title }}</strong>
+                    <span>{{ item.description }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        {% if p.experience %}
+        <section class="profile-section">
+            <h4>經歷</h4>
+            <ol class="profile-timeline">
+                {% for job in p.experience %}
+                <li>
+                    <span class="profile-company">{{ job.company }}</span>
+                    <span class="profile-title">{{ job.title }}</span>
+                    <span class="profile-duration">{{ job.duration }}</span>
+                </li>
+                {% endfor %}
+            </ol>
+        </section>
+        {% endif %}
+
+        {% if p.certifications %}
+        <section class="profile-section">
+            <h4>專業證照與研習</h4>
+            <dl class="profile-certs">
+                {% for group in p.certifications %}
+                <dt>{{ group.year }}</dt>
+                <dd>
+                    <ul>
+                        {% for item in group['items'] %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+                {% endfor %}
+            </dl>
+        </section>
+        {% endif %}
+    </dialog>
+    {% endfor %}
 </section>
 {% endblock %}

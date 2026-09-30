@@ -172,16 +172,26 @@
     revealEls.forEach((el) => observer.observe(el));
 })();
 
-// 點擊團隊成員卡片時，展開/收合下方的簡介文字
+// 團隊成員「查看完整經歷」：開啟對應的經歷對話框
 (function () {
-    const cards = document.querySelectorAll(".team-card");
-    if (cards.length === 0) return;
+    document.querySelectorAll(".team-more").forEach((button) => {
+        const dialog = document.getElementById(button.dataset.profile);
+        if (!dialog) return;
 
-    cards.forEach((card) => {
-        if (!card.querySelector(".team-bio")) return;
+        button.addEventListener("click", () => dialog.showModal());
+    });
 
-        card.addEventListener("click", () => {
-            card.classList.toggle("is-active");
+    document.querySelectorAll(".profile-dialog").forEach((dialog) => {
+        dialog.querySelector(".profile-close").addEventListener("click", () => dialog.close());
+
+        // 點擊對話框外的遮罩區域時關閉
+        dialog.addEventListener("click", (event) => {
+            if (event.target !== dialog) return;
+            const rect = dialog.getBoundingClientRect();
+            const inside =
+                event.clientX >= rect.left && event.clientX <= rect.right &&
+                event.clientY >= rect.top && event.clientY <= rect.bottom;
+            if (!inside) dialog.close();
         });
     });
 })();
