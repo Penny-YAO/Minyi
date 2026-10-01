@@ -107,6 +107,109 @@ body {
     flex-shrink: 0;
 }
 
+/* 手機版選單按鈕：桌機隱藏，窄螢幕時取代橫列選單 */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-toggle:hover,
+.site-header.is-menu-open .nav-toggle {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.nav-toggle-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+/* 開啟時三條線變成叉叉 */
+.site-header.is-menu-open .nav-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.site-header.is-menu-open .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.site-header.is-menu-open .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+    .nav-toggle {
+        display: inline-flex;
+    }
+
+    /* 選單收合為按鈕下方的下拉面板 */
+    .nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 4px 24px 12px;
+        background: #fff;
+        border-top: 1px solid var(--color-border);
+        box-shadow: 0 16px 30px rgba(27, 58, 107, 0.12);
+        max-height: calc(100vh - 100%);
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+    }
+
+    .site-header.is-menu-open .nav {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition-delay: 0s;
+    }
+
+    .nav a {
+        gap: 12px;
+        margin-left: 0;
+        padding: 14px 4px;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav a:last-child {
+        border-bottom: none;
+    }
+
+    /* 浮動選單開啟時補上白底，避免面板與透明頁首脫節 */
+    .site-header-overlay.is-menu-open {
+        background: #fff;
+        border-bottom-color: var(--color-border);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav,
+    .nav-toggle-bar {
+        transition: none;
+    }
+}
+
 /* Hero */
 .hero {
     text-align: center;
@@ -177,7 +280,7 @@ body {
 
 @media (max-width: 560px) {
     .page-hero {
-        padding-top: calc(var(--header-h, 120px) + 36px);
+        padding-top: calc(var(--header-h, 77px) + 36px);
         padding-bottom: 44px;
     }
 
@@ -712,13 +815,6 @@ body {
 @media (max-width: 600px) {
     .grid-3, .grid-4 {
         grid-template-columns: 1fr;
-    }
-    .header-inner {
-        flex-direction: column;
-        gap: 12px;
-    }
-    .nav a {
-        margin: 0 10px;
     }
 }
 

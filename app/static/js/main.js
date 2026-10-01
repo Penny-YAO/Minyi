@@ -17,6 +17,44 @@
     window.addEventListener("scroll", syncScrolled, { passive: true });
 })();
 
+// 手機版功能選單：點擊右上角按鈕展開／收合，點選項目、點擊外部或按 Esc 時收合
+(function () {
+    const header = document.querySelector(".site-header");
+    const toggle = header && header.querySelector(".nav-toggle");
+    if (!toggle) return;
+
+    const desktop = window.matchMedia("(min-width: 769px)");
+
+    function setOpen(open) {
+        header.classList.toggle("is-menu-open", open);
+        toggle.setAttribute("aria-expanded", String(open));
+        toggle.setAttribute("aria-label", open ? "關閉功能選單" : "開啟功能選單");
+    }
+
+    toggle.addEventListener("click", () => {
+        setOpen(!header.classList.contains("is-menu-open"));
+    });
+
+    header.querySelectorAll(".nav a").forEach((link) => {
+        link.addEventListener("click", () => setOpen(false));
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!header.contains(event.target)) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !header.classList.contains("is-menu-open")) return;
+        setOpen(false);
+        toggle.focus();
+    });
+
+    // 視窗放大回桌機版時收合，避免狀態殘留
+    desktop.addEventListener("change", (event) => {
+        if (event.matches) setOpen(false);
+    });
+})();
+
 // 通用輪播元件：任何帶有 data-carousel 屬性的容器都會套用
 (function () {
     const INTERVAL = 5000;
