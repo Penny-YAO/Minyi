@@ -1023,135 +1023,140 @@ body {
     color: var(--color-muted);
 }
 
+/* 成員卡片往上疊在橫幅底部 */
+.team-banner {
+    padding-bottom: 136px;
+}
+
 .section-team {
-    padding-top: 48px;
+    position: relative;
+    z-index: 2;
+    margin-top: -88px;
+    padding-top: 0;
 }
 
 .team-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 20px;
 }
 
 .team-card {
     display: flex;
     flex-direction: column;
+    padding: 26px 22px 24px;
     background: #fff;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(27, 58, 107, 0.08);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .team-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(27, 58, 107, 0.12);
+    box-shadow: 0 18px 40px rgba(27, 58, 107, 0.14);
 }
 
-/* 照片區：固定 3:4 直式比例，沒有照片時顯示預留位置 */
-.team-photo {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    background: linear-gradient(155deg, #e8eef7, #d4deed);
-    overflow: hidden;
-}
-
-.team-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.team-photo-slot {
-    position: absolute;
-    inset: 12px;
+.team-card-head {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+/* 頭像：不放照片，以名稱首字搭配不規則色塊呈現 */
+.team-avatar {
+    flex-shrink: 0;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    border: 2px dashed rgba(27, 58, 107, 0.25);
-    border-radius: 8px;
-    color: rgba(27, 58, 107, 0.45);
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
+    width: 76px;
+    height: 76px;
+    border-radius: 58% 42% 55% 45% / 52% 60% 40% 48%;
+    background: linear-gradient(155deg, #e6effc, #c6daf8);
+    color: var(--color-accent);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
 }
 
-.team-photo-slot svg {
-    width: 56px;
-    height: 56px;
-}
-
-.team-card-empty .team-photo {
-    background: linear-gradient(155deg, var(--color-primary), #0a1730);
-}
-
-.team-card-empty .team-photo-slot {
-    border-color: rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.team-card-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 20px 20px 22px;
-}
-
-.team-card-body h3 {
+.team-card-head h3 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
+    line-height: 1.3;
 }
 
 .team-underline {
     display: block;
-    width: 36px;
+    width: 32px;
     height: 3px;
+    border-radius: 2px;
     background: var(--color-accent);
-    margin: 10px 0 12px;
-}
-
-.team-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.team-tag {
-    background: var(--color-accent);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 999px;
+    margin-top: 10px;
 }
 
 .team-intro {
-    margin: 14px 0 0;
+    margin: 0;
     color: var(--color-muted);
-    font-size: 0.9rem;
-    line-height: 1.7;
+    font-size: 0.92rem;
+    line-height: 1.85;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
+.team-intro-pending {
+    opacity: 0.75;
+}
+
+.team-skills {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.team-skills li {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #eef4fc;
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
 .team-more {
     margin-top: auto;
-    align-self: flex-start;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 16px 0 0;
-    background: none;
-    border: none;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid rgba(47, 128, 237, 0.45);
+    border-radius: 999px;
     color: var(--color-accent);
     font: inherit;
-    font-size: 0.9rem;
+    font-size: 0.92rem;
     font-weight: 700;
     cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* 按鈕貼齊卡片底部（margin-top: auto），這裡保留與上方內容的最小間距 */
+.team-skills:has(+ .team-more),
+.team-intro:has(+ .team-more) {
+    margin-bottom: 22px;
+}
+
+.team-more:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
 }
 
 .team-more svg {
@@ -1162,6 +1167,11 @@ body {
 
 .team-more:hover svg {
     transform: translateX(4px);
+}
+
+.team-card-empty .team-avatar {
+    background: var(--color-bg);
+    color: var(--color-muted);
 }
 
 /* 完整經歷對話框 */
@@ -1205,32 +1215,12 @@ body {
 }
 
 .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 24px;
     padding-bottom: 24px;
     border-bottom: 1px solid var(--color-border);
 }
 
-.profile-header .team-photo {
-    width: 120px;
-    flex-shrink: 0;
-    border-radius: var(--radius);
-}
-
-.profile-header .team-photo-slot {
-    inset: 6px;
-    font-size: 0.7rem;
-    letter-spacing: 0;
-}
-
-.profile-header .team-photo-slot svg {
-    width: 36px;
-    height: 36px;
-}
-
 .profile-header h2 {
-    margin: 0 0 10px;
+    margin: 0;
     font-size: 1.6rem;
 }
 
@@ -1261,10 +1251,18 @@ body {
     gap: 12px;
 }
 
-.profile-specialties li {
+.profile-specialties > li {
     padding: 14px 16px;
     background: var(--color-bg);
     border-radius: 8px;
+}
+
+.profile-specialties ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
 }
 
 .profile-specialties strong {
@@ -1321,6 +1319,15 @@ body {
     font-weight: 600;
 }
 
+.profile-job-desc {
+    flex-basis: 100%;
+    font-size: 0.9rem;
+}
+
+.profile-timeline .profile-job-desc {
+    margin: 4px 0 0;
+}
+
 .profile-certs {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -1335,6 +1342,11 @@ body {
 
 .profile-certs dd {
     margin: 0;
+}
+
+.profile-certs strong {
+    display: block;
+    margin-bottom: 4px;
 }
 
 .profile-certs ul {
@@ -1354,21 +1366,8 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .team-photo {
-        aspect-ratio: 4 / 3;
-    }
-
     .profile-dialog {
         padding: 28px 20px 28px;
-    }
-
-    .profile-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .profile-header .team-photo {
-        aspect-ratio: 3 / 4;
     }
 
     .profile-specialties {

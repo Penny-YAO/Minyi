@@ -1,7 +1,12 @@
 """建立範例資料：團隊成員與作品。使用方式： python seed.py"""
 from app import create_app, db
 from app.models import TeamMember, Work
-from app.team_profiles import PENNY_PHOTO, PENNY_PROFILE
+from app.team_profiles import (
+    EMILY_PROFILE,
+    LEO_PROFILE,
+    PENNY_PHOTO,
+    PENNY_PROFILE,
+)
 
 app = create_app()
 
@@ -9,24 +14,26 @@ with app.app_context():
     if not TeamMember.query.first():
         db.session.add_all([
             TeamMember(
-                name="家臻 Emily",
+                name="Emily",
                 role="美編",
+                profile=EMILY_PROFILE,
                 order=1,
             ),
             TeamMember(
-                name="佩純 Penny",
+                name="Penny",
                 role="系統分析規劃",
                 photo_url=PENNY_PHOTO,
                 profile=PENNY_PROFILE,
                 order=2,
             ),
             TeamMember(
-                name="偉鈞 Leo",
+                name="九九",
                 role="全端工程師 / 資料庫分析",
+                profile=LEO_PROFILE,
                 order=3,
             ),
             TeamMember(
-                name="佩彤 Wendy",
+                name="Wendy",
                 role="全端工程師 / 資料庫分析",
                 order=4,
             ),
