@@ -6,6 +6,8 @@ from app.team_profiles import (
     LEO_PROFILE,
     PENNY_PHOTO,
     PENNY_PROFILE,
+    TEAM_BIOS,
+    WENDY_PROFILE,
 )
 
 app = create_app()
@@ -15,12 +17,14 @@ with app.app_context():
         db.session.add_all([
             TeamMember(
                 name="Emily",
+                bio=TEAM_BIOS["Emily"],
                 role="美編",
                 profile=EMILY_PROFILE,
                 order=1,
             ),
             TeamMember(
                 name="Penny",
+                bio=TEAM_BIOS["Penny"],
                 role="系統分析規劃",
                 photo_url=PENNY_PHOTO,
                 profile=PENNY_PROFILE,
@@ -28,13 +32,16 @@ with app.app_context():
             ),
             TeamMember(
                 name="九九",
+                bio=TEAM_BIOS["九九"],
                 role="全端工程師 / 資料庫分析",
                 profile=LEO_PROFILE,
                 order=3,
             ),
             TeamMember(
                 name="Wendy",
+                bio=TEAM_BIOS["Wendy"],
                 role="全端工程師 / 資料庫分析",
+                profile=WENDY_PROFILE,
                 order=4,
             ),
         ])

@@ -37,10 +37,10 @@
                     <span class="team-underline"></span>
                 </div>
             </header>
-            {% if member.profile and member.profile.summary %}
-            <p class="team-intro">{{ member.profile.summary[0] }}</p>
-            {% elif member.bio %}
+            {% if member.bio %}
             <p class="team-intro">{{ member.bio }}</p>
+            {% elif member.profile and member.profile.summary %}
+            <p class="team-intro">{{ member.profile.summary[0] }}</p>
             {% else %}
             <p class="team-intro team-intro-pending">完整經歷整理中，敬請期待。</p>
             {% endif %}
