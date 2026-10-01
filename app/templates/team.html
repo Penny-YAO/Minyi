@@ -29,7 +29,7 @@
 <section class="section section-team container">
     <div class="team-grid">
         {% for member in members %}
-        <article class="team-card">
+        <article class="team-card reveal">
             <header class="team-card-head">
                 <span class="team-avatar" aria-hidden="true">{{ member.name[0] }}</span>
                 <div>
@@ -61,7 +61,7 @@
         {% endfor %}
 
         {% for _ in range(placeholder_count) %}
-        <article class="team-card team-card-empty">
+        <article class="team-card team-card-empty reveal">
             <header class="team-card-head">
                 <span class="team-avatar" aria-hidden="true">+</span>
                 <div>
@@ -124,7 +124,6 @@
                 <li>
                     <span class="profile-company">{{ job.company }}</span>
                     <span class="profile-title">{{ job.title }}</span>
-                    <span class="profile-duration">{{ job.duration }}</span>
                     {% if job.description %}
                     <p class="profile-job-desc">{{ job.description }}</p>
                     {% endif %}

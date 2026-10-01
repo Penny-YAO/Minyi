@@ -19,7 +19,7 @@
     {% if works %}
     <div class="grid grid-3">
         {% for work in works %}
-        <div class="card work-card">
+        <div class="card work-card reveal">
             {% if work.video_url %}
             <video src="{{ work.video_url }}" class="work-image" controls preload="metadata"
                    {% if work.image_url %}poster="{{ work.image_url }}"{% endif %}></video>

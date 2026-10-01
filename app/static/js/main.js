@@ -169,9 +169,10 @@
     });
 })();
 
-// 捲動至區塊時的淡入動態效果
+// 捲動進場動畫：區塊捲入畫面時播放一次，同時進場的區塊依序錯開
 (function () {
-    const revealEls = document.querySelectorAll(".reveal, .reveal-down, .reveal-stagger");
+    const STAGGER = 120;
+    const revealEls = document.querySelectorAll(".reveal, .reveal-down, .reveal-right, .reveal-zoom");
     if (revealEls.length === 0) return;
 
     if (!("IntersectionObserver" in window)) {
@@ -181,11 +182,15 @@
 
     const observer = new IntersectionObserver(
         (entries) => {
-            entries.forEach((entry) => {
-                entry.target.classList.toggle("is-visible", entry.isIntersecting);
-            });
+            entries
+                .filter((entry) => entry.isIntersecting)
+                .forEach((entry, index) => {
+                    entry.target.style.setProperty("--reveal-delay", index * STAGGER + "ms");
+                    entry.target.classList.add("is-visible");
+                    observer.unobserve(entry.target);
+                });
         },
-        { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+        { threshold: 0.1, rootMargin: "0px 0px -60px 0px" }
     );
 
     revealEls.forEach((el) => observer.observe(el));

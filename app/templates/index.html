@@ -41,8 +41,8 @@
 </div>
 {% endmacro %}
 
-<section class="split-highlight reveal">
-    <div class="split-panel split-panel-fast">
+<section class="split-highlight">
+    <div class="split-panel split-panel-fast reveal">
         <svg class="split-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
         <div class="split-panel-inner">
             <h2>快速架站</h2>
@@ -54,7 +54,7 @@
             </ul>
         </div>
     </div>
-    <div class="split-panel split-panel-custom">
+    <div class="split-panel split-panel-custom reveal-right">
         <svg class="split-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/><circle cx="12" cy="12" r="4"/></svg>
         <div class="split-panel-inner">
             <h2>客製化服務</h2>
@@ -93,7 +93,7 @@
     <div class="container service-row">
         <div class="service-col">
         <h2 class="reveal">服務核心</h2>
-        <div class="pager reveal" data-pager aria-roledescription="翻頁" aria-label="服務核心">
+        <div class="pager reveal-zoom" data-pager aria-roledescription="翻頁" aria-label="服務核心">
             <div class="pager-book">
             {% for point in philosophy_points %}
             <article class="pager-page{{ ' active' if loop.first }}" aria-label="第 {{ loop.index }} 頁，共 {{ loop.length }} 頁">
@@ -123,7 +123,7 @@
         <div class="service-col specialties">
         <h2 class="reveal">服務項目</h2>
         <p class="section-intro reveal">從個人網站到企業系統，一站式規劃、設計與開發，並介接最新 AI 技術，讓網站管理更為便捷。</p>
-        <div class="pager reveal" data-pager aria-roledescription="翻頁" aria-label="服務項目">
+        <div class="pager reveal-right" data-pager aria-roledescription="翻頁" aria-label="服務項目">
             <div class="pager-book">
             {% for item in specialties %}
             <article class="pager-page{{ ' active' if loop.first }}" aria-label="第 {{ loop.index }} 頁，共 {{ loop.length }} 頁">
