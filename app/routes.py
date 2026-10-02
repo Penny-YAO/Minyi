@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 
 from app import db
-from app.models import TeamMember, Work, ContactMessage, Partner
+from app.models import TeamMember, ContactMessage, Partner
 from app.forms import ContactForm
+from app.tech_scope import TECH_STATS, TECH_DOMAINS, TECH_SYSTEMS, TECH_FLOW
 
 main_bp = Blueprint("main", __name__)
 
@@ -73,11 +74,22 @@ def team():
     )
 
 
+@main_bp.route("/tech")
+def tech():
+    """技術範疇：濃縮團隊成員專長的一頁式技術介紹"""
+    return render_template(
+        "tech.html",
+        stats=TECH_STATS,
+        domains=TECH_DOMAINS,
+        systems=TECH_SYSTEMS,
+        flow=TECH_FLOW,
+    )
+
+
 @main_bp.route("/portfolio")
 def portfolio():
-    """案例實績"""
-    works = Work.query.order_by(Work.order.asc(), Work.created_at.desc()).all()
-    return render_template("portfolio.html", works=works)
+    """舊的案例實績網址，導向技術範疇"""
+    return redirect(url_for("main.tech"))
 
 
 @main_bp.route("/contact", methods=["GET", "POST"])

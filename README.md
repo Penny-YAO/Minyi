@@ -1,6 +1,6 @@
 # Minyi Studio
 
-個人工作室官方網站，使用 Python + Flask 建構，內容涵蓋核心理念、團隊成員介紹、案例實績與聯絡方式。
+個人工作室官方網站，使用 Python + Flask 建構，內容涵蓋核心理念、團隊成員介紹、技術範疇與聯絡方式。
 
 ## 專案架構
 
@@ -11,11 +11,12 @@ Minyi/
 │   ├── models.py          # 資料模型：TeamMember, Work, ContactMessage, AdminUser
 │   ├── forms.py           # 聯絡表單 (Flask-WTF)
 │   ├── routes.py          # 路由與頁面邏輯
+│   ├── tech_scope.py      # 技術範疇頁的內容
 │   ├── templates/         # Jinja2 樣板
 │   │   ├── base.html
 │   │   ├── index.html     # 核心理念（首頁）
 │   │   ├── team.html      # 團隊成員介紹
-│   │   ├── portfolio.html # 案例實績
+│   │   ├── tech.html      # 技術範疇
 │   │   └── contact.html   # 聯絡方式
 │   └── static/
 │       ├── css/style.css
@@ -92,7 +93,7 @@ flask --app run set-admin 帳號    # 會提示輸入兩次密碼
 
 - `/`：核心理念
 - `/team`：團隊成員介紹
-- `/portfolio`：案例實績
+- `/tech`：技術範疇（內容在 `app/tech_scope.py`，由團隊成員專長濃縮而成；舊網址 `/portfolio` 會導向這裡）
 - `/contact`：聯絡方式（含表單送出，訊息會存入資料庫）
 
 ## 部署上線（Render / Railway + 自訂網域）
