@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 
 from app import db
-from app.models import TeamMember, ContactMessage, Partner
+from app.models import TeamMember, ContactMessage
 from app.forms import ContactForm
 from app.tech_scope import TECH_STATS, TECH_DOMAINS, TECH_SYSTEMS, TECH_FLOW
 
@@ -33,7 +33,6 @@ def index():
             "icon": "bulb",
         },
     ]
-    partners = Partner.query.order_by(Partner.started_on.desc(), Partner.id.desc()).all()
     specialties = [
         {
             "title": "個人網站架設",
@@ -59,7 +58,6 @@ def index():
     return render_template(
         "index.html",
         philosophy_points=philosophy_points,
-        partners=partners,
         specialties=specialties,
     )
 

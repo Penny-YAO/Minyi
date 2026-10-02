@@ -68,27 +68,6 @@
     </div>
 </section>
 
-<section class="section-block section-white partner-timeline">
-    <div class="container">
-        <h2 class="reveal">合作廠商</h2>
-        {% if partners %}
-        <ol class="timeline">
-            {% for partner in partners %}
-            <li class="timeline-item reveal">
-                <time class="timeline-date" datetime="{{ partner.started_on.isoformat() }}">{{ partner.started_on.strftime("%Y.%m") }}</time>
-                <div class="timeline-card">
-                    <strong>{{ partner.name }}</strong>
-                    <span>{{ partner.software }}</span>
-                </div>
-            </li>
-            {% endfor %}
-        </ol>
-        {% else %}
-        <p class="empty-state reveal">合作廠商整理中，敬請期待</p>
-        {% endif %}
-    </div>
-</section>
-
 <section class="section-block section-white services">
     <div class="container service-row">
         <div class="service-col">
