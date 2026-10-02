@@ -34,7 +34,7 @@ class Config:
     SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    STUDIO_NAME = "明宜資訊"
+    STUDIO_NAME = "樸原資訊"
     STUDIO_TAGLINE = "設計，源於用心"
     CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "milk88695555@gmail.com")
     CONTACT_PHONE = "04-7582446"
